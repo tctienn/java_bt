@@ -1,6 +1,8 @@
 package caseItplus;
 
-public class Catergory {
+import java.io.Serializable;
+
+public class Catergory implements Serializable {
 	private long id;
 	private String name;
 

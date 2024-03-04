@@ -1,5 +1,11 @@
 package caseItplus;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,6 +17,8 @@ public class ProductManager {
 	public List<Catergory> catergory;
 	private List<Product> listProduct;
 	private Scanner sc;
+	private File fileP = new File("C:\\Users\\ADMIN\\Downloads\\output1.txt");
+//	private File fileI = new File("C:\\Users\\ADMIN\\Downloads\\output2.txt");
 
 	public ProductManager(Scanner sc) {
 		super();
@@ -127,12 +135,16 @@ public class ProductManager {
 		int ct;
 
 		do {
+
+			this.listProduct = read(this.fileP);
 			System.out.println(
 					"chức năng \n 1: thêm sản phẩm \n 2: hiển thị danh sách sản phẩm  \n 3: cập nhật sản phẩm  \n 4: xóa sản phẩm theo id \n 5: lọc sản phẩm theo loại  \n 6: sắp xếp danh sách sản phẩm \n 7: tìm kiếm theo tên sản phẩm  \n 8: tìm kiếm theo giá ");
 			ct = checkInt();
 			switch (ct) {
 			case 1: {
 				createProduct();
+
+				write(fileP, this.listProduct);
 				break;
 			}
 			case 2: {
@@ -142,10 +154,12 @@ public class ProductManager {
 			}
 			case 3: {
 				updateProduct();
+				write(fileP, this.listProduct);
 				break;
 			}
 			case 4: {
 				deleteProduct();
+				write(fileP, this.listProduct);
 				break;
 			}
 			case 5: {
@@ -169,6 +183,7 @@ public class ProductManager {
 				break;
 			}
 			case 11: {
+				write(fileP, this.listProduct);
 				break;
 			}
 			default:
@@ -292,4 +307,31 @@ public class ProductManager {
 		}
 	}
 
+	private void write(File file, List<Product> product) {
+		try (ObjectOutputStream oj = new ObjectOutputStream(new FileOutputStream(file))) {
+			oj.writeObject(product);
+		} catch (IOException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
+	private List<Product> read(File file) {
+		List<Product> product = new ArrayList<Product>();
+		try (ObjectInputStream oj = new ObjectInputStream(new FileInputStream(file))) {
+			product = (List<Product>) oj.readObject();
+//			for (Product e : product) {
+//				System.out.println(e.toString());
+//			}
+		} catch (IOException | ClassNotFoundException ex) {
+			ex.printStackTrace();
+			// TODO: handle exception
+		}
+
+		return product;
+	}
+
+//	private void updateFile() {
+//		read
+//	}
 }
